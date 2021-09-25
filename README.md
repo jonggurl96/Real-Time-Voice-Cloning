@@ -63,3 +63,13 @@ or
 `python demo_toolbox.py`  
 
 depending on whether you downloaded any datasets. If you are running an X-server or if you have the error `Aborted (core dumped)`, see [this issue](https://github.com/CorentinJ/Real-Time-Voice-Cloning/issues/11#issuecomment-504733590).
+
+## 한국어 적용하기
+* KSS Dataset [download](https://www.kaggle.com/bryanpark/korean-single-speaker-speech-dataset)
+* 실행 순서
+```
+python synthersizer_preprocess_audio.py --datasets_name kss --subfolders train
+python synthersizer_preprocess_embeds.py
+python synthersizer_train.py
+
+```
