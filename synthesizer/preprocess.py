@@ -12,14 +12,19 @@ import librosa
 
 def preprocess_dataset(datasets_root: Path, out_dir: Path, n_processes: int,
                            skip_existing: bool, hparams, no_alignments: bool,
-                           datasets_name: str, subfolders: str):
+                           datasets_name: str, subfolder: str):
     # Gather the input directories
     dataset_root = datasets_root.joinpath(datasets_name)
-    input_dirs = [dataset_root.joinpath(subfolder.strip()) for subfolder in subfolders.split(",")]
+
+    # input_dirs = E:\AI-Hub data\자유대화 음성(일반남녀)\Training
+    input_dirs = [dataset_root.joinpath(subfolder)]
+
     print("\n    ".join(map(str, ["Using data from:"] + input_dirs)))
+    # 하나라도 없으면 AssertionError
     assert all(input_dir.exists() for input_dir in input_dirs)
     
     # Create the output directories for each output file type
+    # out_dir = E:\\AI-Hub data\\SV2TTS\\synthesizer
     out_dir.joinpath("mels").mkdir(exist_ok=True)
     out_dir.joinpath("audio").mkdir(exist_ok=True)
     
@@ -53,16 +58,19 @@ def preprocess_dataset(datasets_root: Path, out_dir: Path, n_processes: int,
 
 def preprocess_speaker(speaker_dir, out_dir: Path, skip_existing: bool, hparams, no_alignments: bool):
     metadata = []
+    # book_dir = chapter: "일반통합" / "자유대화"
     for book_dir in speaker_dir.glob("*"):
+        # else만 신경쓰면 됨
         if no_alignments:
             # Gather the utterance audios and texts
             # LibriTTS uses .wav but we will include extensions for compatibility with other datasets
             extensions = ["*.wav", "*.flac", "*.mp3"]
             for extension in extensions:
                 wav_fpaths = book_dir.glob(extension)
-
+                
                 for wav_fpath in wav_fpaths:
                     # Load the audio waveform
+                    # not use sampling rate
                     wav, _ = librosa.load(str(wav_fpath), hparams.sample_rate)
                     if hparams.rescale:
                         wav = wav / np.abs(wav).max() * hparams.rescaling_max
@@ -86,26 +94,31 @@ def preprocess_speaker(speaker_dir, out_dir: Path, skip_existing: bool, hparams,
             # Process alignment file (LibriSpeech support)
             # Gather the utterance audios and texts
             try:
-                alignments_fpath = next(book_dir.glob("*.alignment.txt"))
+                alignments_fpath = next(book_dir.glob("*.trans.txt"))
                 with alignments_fpath.open("r") as alignments_file:
-                    alignments = [line.rstrip().split(" ") for line in alignments_file]
+                    # [[0.0baesubin-일반통합-00009, 다들, 마찬가지죠], ...]
+                    alignments = [[line.rstrip().split(" ")[0], line.rstrip().split(" ")[1:]] for line in alignments_file]
             except StopIteration:
                 # A few alignment files will be missing
                 continue
 
             # Iterate over each entry in the alignments file
-            for wav_fname, words, end_times in alignments:
-                wav_fpath = book_dir.joinpath(wav_fname + ".flac")
-                assert wav_fpath.exists()
-                words = words.replace("\"", "").split(",")
-                end_times = list(map(float, end_times.replace("\"", "").split(",")))
+            # for wav_fname, words, end_times in alignments:
+            for wav_fname, words in alignments:
+                wav_fpath = book_dir.joinpath(wav_fname + ".wav")
+                assert wav_fpath.exists() # 없으면 AssertionError
+                words = words.replace("\"", "").split(",") # 따옴표 없애고 , 분리
+                # end_times = list(map(float, end_times.replace("\"", "").split(",")))
 
                 # Process each sub-utterance
-                wavs, texts = split_on_silences(wav_fpath, words, end_times, hparams)
-                for i, (wav, text) in enumerate(zip(wavs, texts)):
-                    sub_basename = "%s_%02d" % (wav_fname, i)
-                    metadata.append(process_utterance(wav, text, out_dir, sub_basename,
-                                                      skip_existing, hparams))
+                # wavs, texts = split_on_silences(wav_fpath, words, end_times, hparams)
+                # for i, (wav, text) in enumerate(zip(wavs, texts)):
+                #     sub_basename = "%s_%02d" % (wav_fname, i)
+                #     metadata.append(process_utterance(wav, text, out_dir, sub_basename,
+                #                                       skip_existing, hparams))
+                
+                # 음성파일 하나 통째로 옮겨서 텍스트 한 줄과 비교로 변경 요망
+                metadata.append("")
 
     return [m for m in metadata if m is not None]
 
@@ -206,6 +219,7 @@ def process_utterance(wav: np.ndarray, text: str, out_dir: Path, basename: str,
     # Trim silence
     if hparams.trim_silence:
         wav = encoder.preprocess_wav(wav, normalize=False, trim_silence=True)
+        # 그냥 깔끔히 잘 정리된 오디오, normalize, resmapling, ...
     
     # Skip utterances that are too short
     if len(wav) < hparams.utterance_min_duration * hparams.sample_rate:

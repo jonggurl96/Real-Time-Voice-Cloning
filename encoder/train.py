@@ -19,8 +19,8 @@ def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int,
     dataset = SpeakerVerificationDataset(clean_data_root)
     loader = SpeakerVerificationDataLoader(
         dataset,
-        speakers_per_batch,
-        utterances_per_speaker,
+        speakers_per_batch, # batch 당 64speaker
+        utterances_per_speaker, # speaker 당 최대 10개 대화
         num_workers=8,
     )
     

@@ -34,6 +34,8 @@ recognized_datasets = [
     "VoxCeleb2/dev/aac",
     "VoxCeleb2/test/aac",
     "VCTK-Corpus/wav48",
+    "E:/AI-Hub data/자유대화 음성(일반남녀)/Training",
+    "E:/AI-Hub data/자유대화 음성(일반남녀)/Validation"
 ]
 
 #Maximum of generated wavs to keep on memory
