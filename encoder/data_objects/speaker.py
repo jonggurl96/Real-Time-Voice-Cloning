@@ -5,8 +5,8 @@ from pathlib import Path
 # Contains the set of utterances of a single speaker
 class Speaker:
     def __init__(self, root: Path):
-        self.root = root
-        self.name = root.name
+        self.root = root # recorderId까지의 Path
+        self.name = root.name # Path의 마지막 File/Dir: recorderId
         self.utterances = None
         self.utterance_cycler = None
         

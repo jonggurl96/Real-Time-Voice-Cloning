@@ -65,11 +65,25 @@ or
 depending on whether you downloaded any datasets. If you are running an X-server or if you have the error `Aborted (core dumped)`, see [this issue](https://github.com/CorentinJ/Real-Time-Voice-Cloning/issues/11#issuecomment-504733590).
 
 ## 한국어 적용하기
-* KSS Dataset [download](https://www.kaggle.com/bryanpark/korean-single-speaker-speech-dataset)
+* Ai Hub 자유대화 음성(일반남여) [**source**](https://aihub.or.kr/aidata/30703)
 * 실행 순서
 ```
-python synthersizer_preprocess_audio.py --datasets_name kss --subfolders train
-python synthersizer_preprocess_embeds.py
-python synthersizer_train.py
+python synthesizer_preprocess_audio.py datasets_root E:\AI-Hub data
+python synthesizer_preprocess_embeds.py
+python synthesizer_train.py
 
 ```
+
+## dataset 구조 비교
+### datasets_root = E:\\AI-Hub data
+[*각자 data 폴더 구조에 맞게 변경*]
+|datasets_name|LibriSpeech|자유대화 음성(일반남녀)|
+|---|---|---|
+|subfolder|train-clean-100|Training|
+|speaker|19|0.0baesubin	=> Speaker self.root|
+|chapter|198|일반대화|
+|text|19-198.trans.txt|0.0baesubin-일반대화.trans.txt|
+|audio|19-198-0000.flac|0.0baesubin-일반대화-00002.wav|
+
+==============================
+
