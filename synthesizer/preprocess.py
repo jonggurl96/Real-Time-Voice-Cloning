@@ -4,6 +4,8 @@ from functools import partial
 from itertools import chain
 from encoder import inference as encoder
 from pathlib import Path
+from korean.thing2kor import bracket_parse
+from korean.korean2jamo import text_to_sequence
 from utils import logmmse
 from tqdm import tqdm
 import numpy as np
@@ -60,10 +62,20 @@ def preprocess_speaker(speaker_dir, out_dir: Path, skip_existing: bool, hparams,
     metadata = []
     # book_dir = chapter: "일반통합" / "자유대화"
     for book_dir in speaker_dir.glob("*"):
-        # else만 신경쓰면 됨
+        # if만 신경쓰면 됨
         if no_alignments:
             # Gather the utterance audios and texts
             # LibriTTS uses .wav but we will include extensions for compatibility with other datasets
+            text_fpath = book_dir.glob("*.txt")
+            assert text_fpath.exists()
+            with open(text_fpath, "r") as text_file:
+                # {"19-198-0000": "North Abbey"}
+                texts = {}
+                for al in text_file:
+                    al = al.rstrip()
+                    fn = al.split(" ")[0]
+                    texts[fn] = al.replace(fn+" ", "")
+            
             extensions = ["*.wav", "*.flac", "*.mp3"]
             for extension in extensions:
                 wav_fpaths = book_dir.glob(extension)
@@ -76,19 +88,12 @@ def preprocess_speaker(speaker_dir, out_dir: Path, skip_existing: bool, hparams,
                         wav = wav / np.abs(wav).max() * hparams.rescaling_max
 
                     # Get the corresponding text
-                    # Check for .txt (for compatibility with other datasets)
-                    text_fpath = wav_fpath.with_suffix(".txt")
-                    if not text_fpath.exists():
-                        # Check for .normalized.txt (LibriTTS)
-                        text_fpath = wav_fpath.with_suffix(".normalized.txt")
-                        assert text_fpath.exists()
-                    with text_fpath.open("r") as text_file:
-                        text = "".join([line for line in text_file])
-                        text = text.replace("\"", "")
-                        text = text.strip()
+                   # 0.0baesubin-일반대화-00002.wav
+                   wav_name = str(wav_fpath.sith_suffix("").name)
+                   text = texts[wav_name]
 
                     # Process the utterance
-                    metadata.append(process_utterance(wav, text, out_dir, str(wav_fpath.with_suffix("").name),
+                    metadata.append(process_utterance(wav, text, out_dir, wav_name,
                                                       skip_existing, hparams))
         else:
             # Process alignment file (LibriSpeech support)
@@ -97,7 +102,8 @@ def preprocess_speaker(speaker_dir, out_dir: Path, skip_existing: bool, hparams,
                 alignments_fpath = next(book_dir.glob("*.trans.txt"))
                 with alignments_fpath.open("r") as alignments_file:
                     # [[0.0baesubin-일반통합-00009, 다들, 마찬가지죠], ...]
-                    alignments = [[line.rstrip().split(" ")[0], line.rstrip().split(" ")[1:]] for line in alignments_file]
+                    # alignments = [[line.rstrip().split(" ")[0], line.rstrip().split(" ")[1:]] for line in alignments_file]
+                    alignments = [[al.rstrip().split(" ")[0], al.rstrip().replace(al.rstrip().split(" ")[0]+" ", "")] for al in alignments_file]
             except StopIteration:
                 # A few alignment files will be missing
                 continue
