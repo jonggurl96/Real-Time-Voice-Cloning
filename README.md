@@ -68,7 +68,7 @@ depending on whether you downloaded any datasets. If you are running an X-server
 * Ai Hub 자유대화 음성(일반남여) [**source**](https://aihub.or.kr/aidata/30703)
 * 실행 순서
 ```
-python synthesizer_preprocess_audio.py datasets_root E:\AI-Hub data
+python synthesizer_preprocess_audio.py E:\AI-Hub_data
 python synthesizer_preprocess_embeds.py
 python synthesizer_train.py
 

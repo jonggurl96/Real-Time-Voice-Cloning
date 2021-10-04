@@ -24,12 +24,12 @@ dict_num2kor_count = {
 num_unit_kor = "천백십해천백십경천백십조천백십억천백십만천백십"
 
 # erase guideline code
-def bracket_parse(text:string):
+def bracket_parse(text:str):
   for start in starts:
     text = text.replace(start, "")
     text = text.replace(")", "")
     text = text.replace("0", "")
-  return text
+  return text.strip()
 
 
 # eng2kor
