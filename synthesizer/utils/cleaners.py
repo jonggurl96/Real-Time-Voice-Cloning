@@ -86,3 +86,7 @@ def english_cleaners(text):
   text = expand_abbreviations(text)
   text = collapse_whitespace(text)
   return text
+
+def korean_cleaners(text):
+  """숫자, 줄임말 등은 이미 모두 한글로 바뀐 상태의 txt를 사용하므로 """
+  return text

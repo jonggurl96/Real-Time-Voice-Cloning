@@ -1,5 +1,6 @@
 from .symbols import symbols
 from . import cleaners
+from korean import korean2jamo as k2j
 import re
 
 # Mappings from symbol to numeric ID and vice versa:
@@ -29,7 +30,8 @@ def text_to_sequence(text, cleaner_names):
   while len(text):
     m = _curly_re.match(text)
     if not m:
-      sequence += _symbols_to_sequence(_clean_text(text, cleaner_names))
+      # 이미 정제된 한글을 사용하므로 바로 진입
+      sequence += k2j.text_to_sequence(text)
       break
     sequence += _symbols_to_sequence(_clean_text(m.group(1), cleaner_names))
     sequence += _arpabet_to_sequence(m.group(2))

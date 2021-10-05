@@ -74,7 +74,7 @@ python synthesizer_preprocess_audio.py E:\AI-Hub_data
     audio
     train.txt
 python synthesizer_preprocess_embeds.py E:\AI-Hub_data\SV2TTS\synthesizer
-python synthesizer_train.py
+python synthesizer_train.py run1 E:\AI-Hub_data\SV2TTS\synthesizer
 
 ```
 
@@ -101,3 +101,6 @@ python synthesizer_train.py
   숫자만으로 이루어진 기념일 등 특정 의미가 있는 단어들은 숫자 단위로 띄어쓰기
     - 팔 일 오(8.15), 사 일 구(4.19), 오 칠 오 공 부대(5750부대)
 ```
+
+## 한글 jamo 분리 후 유니코드 변환 표
+[`here`](http://gernot-katzers-spice-pages.com/var/korean_hangul_unicode.html)
