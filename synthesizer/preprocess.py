@@ -93,7 +93,7 @@ def preprocess_speaker(speaker_dir, out_dir: Path, skip_existing: bool, hparams,
                             wav = wav / np.abs(wav).max() * hparams.rescaling_max
                     except:
                         with damaged_fpath.open("a") as damaged:
-                            damaged.write(str(wav_fpath))
+                            damaged.write(str(wav_fpath) + "\n")
                         continue
 
                     # Get the corresponding text
