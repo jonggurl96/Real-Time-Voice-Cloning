@@ -104,3 +104,17 @@ python synthesizer_train.py run1 E:\AI-Hub_data\SV2TTS\synthesizer
 
 ## 한글 jamo 분리 후 유니코드 변환 표
 [`here`](http://gernot-katzers-spice-pages.com/var/korean_hangul_unicode.html)
+<br>
+*`EX) `* 나는 아름다운 나비
+
+|ㄴ|ㅏ|ㄴ|ㅡ|ㄴ| |
+|---|---|---|---|---|---|
+|4|21|4|39|45|69|
+
+|ㅇ|ㅏ|ㄹ|ㅡ|ㅁ|ㄷ|ㅏ|ㅇ|ㅜ|ㄴ| |
+|---|---|---|---|---|---|---|---|---|---|---|
+|13|21|7|39|57|5|21|13|34|45|69|
+
+|ㄴ|ㅏ|ㅂ|ㅣ|EOS|
+|---|---|---|---|---|
+|4|21|9|41|1|
