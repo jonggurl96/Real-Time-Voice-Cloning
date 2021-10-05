@@ -20,8 +20,6 @@ if __name__ == "__main__":
         "this value on GPUs with low memory. Set it to 1 if CUDA is unhappy.")
     args = parser.parse_args()
     
-    # synthesizer_root = synthesizer.preprocess.preprocess_dataset의 out_dir
-
     # Preprocess the dataset
     print_args(args, parser)
     create_embeddings(**vars(args))    

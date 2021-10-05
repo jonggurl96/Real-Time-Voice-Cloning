@@ -10,6 +10,7 @@ if __name__ == "__main__":
         "Name for this model instance. If a model state from the same run ID was previously "
         "saved, the training will restart from there. Pass -f to overwrite saved states and "
         "restart from scratch.")
+    # argparse.SUPPRESS: 명령행 인자가 주어지지 않으면 syn_dir 속성이 추가되지 않음
     parser.add_argument("syn_dir", type=str, default=argparse.SUPPRESS, help= \
         "Path to the synthesizer directory that contains the ground truth mel spectrograms, "
         "the wavs and the embeds.")

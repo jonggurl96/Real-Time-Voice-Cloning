@@ -69,7 +69,11 @@ depending on whether you downloaded any datasets. If you are running an X-server
 * 실행 순서
 ```
 python synthesizer_preprocess_audio.py E:\AI-Hub_data
-python synthesizer_preprocess_embeds.py
+  E:\AI-Hub_data
+    mels
+    audio
+    train.txt
+python synthesizer_preprocess_embeds.py E:\AI-Hub_data\SV2TTS\synthesizer
 python synthesizer_train.py
 
 ```
