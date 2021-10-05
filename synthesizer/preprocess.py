@@ -89,12 +89,12 @@ def preprocess_speaker(speaker_dir, out_dir: Path, skip_existing: bool, hparams,
                     # not use sampling rate
                     try:
                         wav, _ = librosa.load(str(wav_fpath), hparams.sample_rate)
+                        if hparams.rescale:
+                            wav = wav / np.abs(wav).max() * hparams.rescaling_max
                     except:
                         with damaged_fpath.open("a") as damaged:
                             damaged.write(str(wav_fpath))
                         continue
-                    if hparams.rescale:
-                        wav = wav / np.abs(wav).max() * hparams.rescaling_max
 
                     # Get the corresponding text
                     # 0.0baesubin-일반대화-00002.wav
