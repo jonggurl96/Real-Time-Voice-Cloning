@@ -295,7 +295,7 @@ def create_embeddings(synthesizer_root: Path, encoder_model_fpath: Path, n_proce
     embed_dir.mkdir(exist_ok=True)
 
     # Gather the input wave filepath and the target output embed filepath
-    with metadata_fpath.open("r") as metadata_file:
+    with metadata_fpath.open("r", encoding="utf-8") as metadata_file:
         # [ [audio, mel, embed, len(wav), frame, txt], [...], ... ]
         metadata = [line.split("|") for line in metadata_file]
 
