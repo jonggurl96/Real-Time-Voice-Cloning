@@ -1,6 +1,6 @@
 import re # regular expression
 
-starts = ["(NO:", "(FP:", "(SP:", "(SN:", "0NO:", "0FP:", "0SP:", "0SN:", "("]
+exes = ["NO", "No", "FP", "SP", "SN", "(", ")", "[", "]", ":", "0"]
 
 # V: 브이/비에서 브이만 추출
 # Z: 제트/지에서 지만 추출
@@ -25,10 +25,8 @@ num_unit_kor = "천백십해천백십경천백십조천백십억천백십만천�
 
 # erase guideline code
 def bracket_parse(text:str):
-  for start in starts:
-    text = text.replace(start, "")
-    text = text.replace(")", "")
-    text = text.replace("0", "")
+  for ex in exes:
+    text = text.replace(ex, "")
   return text.strip()
 
 

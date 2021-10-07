@@ -2,7 +2,8 @@ import torch
 from torch.utils.data import Dataset
 import numpy as np
 from pathlib import Path
-from synthesizer.utils.text import text_to_sequence
+from korean.korean2jamo import text_to_sequence
+from korean.thing2kor import bracket_parse
 
 
 class SynthesizerDataset(Dataset):
@@ -36,7 +37,7 @@ class SynthesizerDataset(Dataset):
         embed = np.load(embed_path)
 
         # Get the text and clean it
-        text = text_to_sequence(self.samples_texts[index], self.hparams.tts_cleaner_names)
+        text = text_to_sequence(bracket_parse(self.samples_texts[index]))
         
         # Convert the list returned by text_to_sequence to a numpy array
         text = np.asarray(text).astype(np.int32)
