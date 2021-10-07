@@ -308,7 +308,5 @@ def create_embeddings(synthesizer_root: Path, encoder_model_fpath: Path, n_proce
     # encoder_model_fpath = "encoder/saved_models/pretrained.pt"
     func = partial(embed_utterance, encoder_model_fpath=encoder_model_fpath)
     job = Pool(n_processes).imap(func, fpaths)
-    result = list(tqdm(job, "Embedding", len(fpaths), unit="utterances"))
+    list(tqdm(job, "Embedding", len(fpaths), unit="utterances"))
 
-    print("finish")
-    print(result)
