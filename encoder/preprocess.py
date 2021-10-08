@@ -13,7 +13,7 @@ class DatasetLog:
     Registers metadata about the dataset in a text file.
     """
     def __init__(self, root, name):
-        self.text_file = open(Path(root, "Log_%s.txt" % name.replace("/", "_")), "w")
+        self.text_file = open(Path(root, "Log_%s.txt" % name.replace("/", "_")), "w", encoding="utf-8")
         self.sample_data = dict()
         
         start_time = str(datetime.now().strftime("%A %d %B %Y at %H:%M"))
@@ -85,7 +85,7 @@ def _preprocess_speaker_dirs(speaker_dirs, dataset_name, datasets_root, out_dir,
             existing_fnames = {}
         
         # Gather all audio files for that speaker recursively
-        sources_file = sources_fpath.open("a" if skip_existing else "w")
+        sources_file = sources_fpath.open("a" if skip_existing else "w", encoding="utf-8")
         for in_fpath in speaker_dir.glob("**/*.%s" % extension):
             # Check if the target output file already exists
             out_fname = "_".join(in_fpath.relative_to(speaker_dir).parts)
