@@ -70,7 +70,7 @@ depending on whether you downloaded any datasets. If you are running an X-server
 1. encoder
 ```
 python encoder_preprocess.py E:\AI-Hub_data
-python encoder_train.py
+python encoder_train.py run1 E:\AI-Hub_data\SV2TTS\encoder
 ```
 2. synthesize
 ```
@@ -83,7 +83,7 @@ python synthesizer_preprocess_embeds.py E:\AI-Hub_data\SV2TTS\synthesizer
 python synthesizer_train.py run1 E:\AI-Hub_data\SV2TTS\synthesizer
 
 ```
-2. Mel-spectrogram to audio
+3. vocoder (Mel-spectrogram to audio)
 ```
 python vocoder_preprocess.py E:\AI-Hub_data
 python vocoder_train.py run1 E:\AI-Hub_data
