@@ -67,6 +67,7 @@ depending on whether you downloaded any datasets. If you are running an X-server
 ## 한국어 적용하기
 * Ai Hub 자유대화 음성(일반남여) [**source**](https://aihub.or.kr/aidata/30703)
 * 실행 순서
+1. Mel-spectrogram
 ```
 python synthesizer_preprocess_audio.py E:\AI-Hub_data
   E:\AI-Hub_data
@@ -76,6 +77,11 @@ python synthesizer_preprocess_audio.py E:\AI-Hub_data
 python synthesizer_preprocess_embeds.py E:\AI-Hub_data\SV2TTS\synthesizer
 python synthesizer_train.py run1 E:\AI-Hub_data\SV2TTS\synthesizer
 
+```
+2. Mel-spectrogram to audio
+```
+python vocoder_preprocess.py E:\AI-Hub_data
+python vocoder_train.py run1 E:\AI-Hub_data
 ```
 
 ## dataset 구조 비교
