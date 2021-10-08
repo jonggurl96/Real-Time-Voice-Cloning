@@ -4,7 +4,7 @@ from torch import optim
 from torch.utils.data import DataLoader
 from synthesizer import audio
 from synthesizer.models.tacotron import Tacotron
-from synthesizer.synthesizer_dataset import SynthesizerDataset, collate_synthesizer
+from synthesizer.synthesizer_dataset import SynthesizerDataset, collate_synthesizer2
 from synthesizer.utils import ValueWindow, data_parallel_workaround
 from synthesizer.utils.plot import plot_spectrogram
 from korean.korean2jamo import symbols
@@ -138,7 +138,7 @@ def train(run_id: str, syn_dir: str, models_dir: str, save_every: int,
                 # There is a following session, go to it
                 continue
 
-        model.r = r
+        model.r = r # 2
 
         # Begin the training
         simple_table([(f"Steps with r={r}", str(training_steps // 1000) + "k Steps"),
@@ -150,7 +150,7 @@ def train(run_id: str, syn_dir: str, models_dir: str, save_every: int,
             p["lr"] = lr
 
         data_loader = DataLoader(dataset,
-                                 collate_fn=collate_synthesizer,
+                                 collate_fn=collate_synthesizer2,
                                  batch_size=batch_size, # 12
                                  num_workers=2,
                                  shuffle=True,

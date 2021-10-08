@@ -92,3 +92,6 @@ def pad1d(x, max_len, pad_value=0):
 
 def pad2d(x, max_len, pad_value=0):
     return np.pad(x, ((0, 0), (0, max_len - x.shape[-1])), mode="constant", constant_values=pad_value)
+
+def collate_synthesizer2(batch):
+    return collate_synthesizer(batch, r=2)
