@@ -1,6 +1,6 @@
 from multiprocess.pool import ThreadPool
 from encoder.params_data import *
-from encoder.config import librispeech_datasets, anglophone_nationalites
+from encoder.config import aihub_dialog_datasets, anglophone_nationalites
 from datetime import datetime
 from encoder import audio
 from pathlib import Path
@@ -77,7 +77,7 @@ def _preprocess_speaker_dirs(speaker_dirs, dataset_name, datasets_root, out_dir,
         # there already is a sources file.
         if sources_fpath.exists():
             try:
-                with sources_fpath.open("r") as sources_file:
+                with sources_fpath.open("r", encoding="utf-8") as sources_file:
                     existing_fnames = {line.split(",")[0] for line in sources_file}
             except:
                 existing_fnames = {}
@@ -118,8 +118,8 @@ def _preprocess_speaker_dirs(speaker_dirs, dataset_name, datasets_root, out_dir,
     print("Done preprocessing %s.\n" % dataset_name)
 
 
-def preprocess_librispeech(datasets_root: Path, out_dir: Path, skip_existing=False):
-    for dataset_name in librispeech_datasets["train"]["other"]:
+def preprocess_dialog(datasets_root: Path, out_dir: Path, skip_existing=False):
+    for dataset_name in aihub_dialog_datasets["train"]["clean"]:
         # Initialize the preprocessing
         dataset_root, logger = _init_preprocess_dataset(dataset_name, datasets_root, out_dir)
         if not dataset_root:
@@ -127,7 +127,7 @@ def preprocess_librispeech(datasets_root: Path, out_dir: Path, skip_existing=Fal
         
         # Preprocess all speakers
         speaker_dirs = list(dataset_root.glob("*"))
-        _preprocess_speaker_dirs(speaker_dirs, dataset_name, datasets_root, out_dir, "flac",
+        _preprocess_speaker_dirs(speaker_dirs, dataset_name, datasets_root, out_dir, "wav",
                                  skip_existing, logger)
 
 

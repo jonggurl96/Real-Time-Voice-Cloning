@@ -1,4 +1,4 @@
-from encoder.preprocess import preprocess_librispeech, preprocess_voxceleb1, preprocess_voxceleb2
+from encoder.preprocess import preprocess_dialog
 from utils.argutils import print_args
 from pathlib import Path
 import argparse
@@ -29,7 +29,7 @@ if __name__ == "__main__":
         "Path to the output directory that will contain the mel spectrograms. If left out, "
         "defaults to <datasets_root>/SV2TTS/encoder/")
     parser.add_argument("-d", "--datasets", type=str, 
-                        default="librispeech_other,voxceleb1,voxceleb2", help=\
+                        default="aihub_dialog", help=\
         "Comma-separated list of the name of the datasets you want to preprocess. Only the train "
         "set of these datasets will be used. Possible names: librispeech_other, voxceleb1, "
         "voxceleb2.")
@@ -51,7 +51,6 @@ if __name__ == "__main__":
     del args.no_trim
 
     # Process the arguments
-    args.datasets = args.datasets.split(",")
     if not hasattr(args, "out_dir"):
         args.out_dir = args.datasets_root.joinpath("SV2TTS", "encoder")
     assert args.datasets_root.exists()
@@ -59,12 +58,7 @@ if __name__ == "__main__":
 
     # Preprocess the datasets
     print_args(args, parser)
-    preprocess_func = {
-        "librispeech_other": preprocess_librispeech,
-        "voxceleb1": preprocess_voxceleb1,
-        "voxceleb2": preprocess_voxceleb2,
-    }
     args = vars(args)
     for dataset in args.pop("datasets"):
         print("Preprocessing %s" % dataset)
-        preprocess_func[dataset](**args)
+        preprocess_dialog(**args)
