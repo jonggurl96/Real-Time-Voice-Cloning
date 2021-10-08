@@ -1,9 +1,8 @@
 import torch
 from torch.utils.data import DataLoader
-from synthesizer.hparams import hparams_debug_string
+from synthesizer.hparams import modified_hp_debug_string
 from synthesizer.synthesizer_dataset import SynthesizerDataset, collate_synthesizer
 from synthesizer.models.tacotron import Tacotron
-from synthesizer.utils.text import text_to_sequence
 from synthesizer.utils.symbols import symbols
 import numpy as np
 from pathlib import Path
@@ -13,8 +12,8 @@ from tqdm import tqdm
 def run_synthesis(in_dir, out_dir, model_dir, hparams):
     # This generates ground truth-aligned mels for vocoder training
     synth_dir = Path(out_dir).joinpath("mels_gta")
-    synth_dir.mkdir(exist_ok=True)
-    print(hparams_debug_string(hparams))
+    synth_dir.mkdir(exist_ok=True, parents=True)
+    print(modified_hp_debug_string(hparams))
 
     # Check for GPU
     if torch.cuda.is_available():
@@ -49,7 +48,7 @@ def run_synthesis(in_dir, out_dir, model_dir, hparams):
     print("Tacotron weights loaded from step %d" % model.step)
 
     # Synthesize using same reduction factor as the model is currently trained
-    r = np.int32(model.r)
+    r = np.int32(model.r) # 1
 
     # Set model to eval mode (disable gradient and zoneout)
     model.eval()
@@ -62,8 +61,8 @@ def run_synthesis(in_dir, out_dir, model_dir, hparams):
 
     dataset = SynthesizerDataset(metadata_fpath, mel_dir, embed_dir, hparams)
     data_loader = DataLoader(dataset,
-                             collate_fn=lambda batch: collate_synthesizer(batch, r),
-                             batch_size=hparams.synthesis_batch_size,
+                             collate_fn=collate_synthesizer,
+                             batch_size=hparams.synthesis_batch_size, # 16
                              num_workers=2,
                              shuffle=False,
                              pin_memory=True)
@@ -77,10 +76,12 @@ def run_synthesis(in_dir, out_dir, model_dir, hparams):
             embeds = embeds.to(device)
 
             # Parallelize model onto GPUS using workaround due to python bug
-            if device.type == "cuda" and torch.cuda.device_count() > 1:
-                _, mels_out, _ = data_parallel_workaround(model, texts, mels, embeds)
-            else:
-                _, mels_out, _ = model(texts, mels, embeds)
+            # if device.type == "cuda" and torch.cuda.device_count() > 1:
+            #     _, mels_out, _ = data_parallel_workaround(model, texts, mels, embeds)
+            # else:
+            #     _, mels_out, _ = model(texts, mels, embeds)
+
+            _, mels_out, _ = model(texts, mels, embeds)
 
             for j, k in enumerate(idx):
                 # Note: outputs mel-spectrogram files and target ones have same names, just different folders

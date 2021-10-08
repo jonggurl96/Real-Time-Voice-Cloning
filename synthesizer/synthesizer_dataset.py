@@ -4,6 +4,7 @@ import numpy as np
 from pathlib import Path
 from korean.korean2jamo import text_to_sequence
 from korean.thing2kor import bracket_parse
+from synthesizer.hparams import hparams
 
 
 class SynthesizerDataset(Dataset):
@@ -48,7 +49,7 @@ class SynthesizerDataset(Dataset):
         return len(self.samples_fpaths)
 
 
-def collate_synthesizer(batch, r, hparams):
+def collate_synthesizer(batch, r = 1):
     # Text
     x_lens = [len(x[0]) for x in batch]
     max_x_len = max(x_lens)

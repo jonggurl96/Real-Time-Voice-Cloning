@@ -72,17 +72,20 @@ depending on whether you downloaded any datasets. If you are running an X-server
 python encoder_preprocess.py E:\AI-Hub_data
 python encoder_train.py run1 E:\AI-Hub_data\SV2TTS\encoder
 ```
+* E:\AI-Hub_data\SV2TTS\encoder
 2. synthesize
 ```
 python synthesizer_preprocess_audio.py E:\AI-Hub_data
-  E:\AI-Hub_data
-    mels
-    audio
-    train.txt
 python synthesizer_preprocess_embeds.py E:\AI-Hub_data\SV2TTS\synthesizer
 python synthesizer_train.py run1 E:\AI-Hub_data\SV2TTS\synthesizer
-
 ```
+* E:\AI-Hub_data\SV2TTS\synthesizer
+  - mels
+  - audio
+  - embed
+  - train.txt - audio/mel/embed/wav_length/mel_frame/text
+  - damaged.txt - 손상된 파일, 제거 요망 (JSON 메타데이터, .wav파일)
+
 3. vocoder (Mel-spectrogram to audio)
 ```
 python vocoder_preprocess.py E:\AI-Hub_data
@@ -101,6 +104,8 @@ python vocoder_train.py run1 E:\AI-Hub_data
 |audio|19-198-0000.flac|0.0baesubin-일반대화-00002.wav|
 
 ==============================
+
+
 
 ## 한국어 입력 시 주의사항
 숫자는 모두 한글로 표현하고 십진 단위로 띄어쓰기

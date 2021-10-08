@@ -118,6 +118,12 @@ def train(run_id: str, syn_dir: str, models_dir: str, save_every: int,
         current_step = model.get_step()
 
         r, lr, max_step, batch_size = session
+        # (2,  1e-3,  20_000,  12)
+        # (2,  5e-4,  40_000,  12)
+        # (2,  2e-4,  80_000,  12)
+        # (2,  1e-4,  160_000,  12)
+        # (2,  3e-5,  320_000,  12)
+        # (2,  1e-5,  640_000,  12)
 
         training_steps = max_step - current_step
 
@@ -144,8 +150,8 @@ def train(run_id: str, syn_dir: str, models_dir: str, save_every: int,
             p["lr"] = lr
 
         data_loader = DataLoader(dataset,
-                                 collate_fn=lambda batch: collate_synthesizer(batch, r, hparams),
-                                 batch_size=batch_size,
+                                 collate_fn=collate_synthesizer,
+                                 batch_size=batch_size, # 12
                                  num_workers=2,
                                  shuffle=True,
                                  pin_memory=True)

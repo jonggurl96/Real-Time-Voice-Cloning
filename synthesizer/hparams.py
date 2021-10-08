@@ -90,3 +90,6 @@ hparams = HParams(
 
 def hparams_debug_string():
     return str(hparams)
+
+def modified_hp_debug_string(modified_hp):
+    return str(modified_hp)
