@@ -119,7 +119,7 @@ python vocoder_train.py run1 E:\AI-Hub_data
 ```
 
 ## 한글 jamo 분리 후 유니코드 변환 표
-![`here`](assets\korean_jamo_codetable.PNG)
+![`here`](https://user-images.githubusercontent.com/20488694/136505384-32791ea4-a406-4ab7-a0fc-812df7d1eb08.PNG)
 
 *`EX) 나는 아름다운 나비`*
 
