@@ -22,6 +22,7 @@ def text_to_sequence(text):
   text = text.replace('.', '')
   text = text.replace(',', '')
   text = text.replace('...', '')
+  text = text.replace('…', '')
   for s in text:
     sequence.append(_symbol_to_id[s])
   sequence.append(_symbol_to_id['~'])
