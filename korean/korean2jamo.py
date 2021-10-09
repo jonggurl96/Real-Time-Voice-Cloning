@@ -9,7 +9,7 @@ JAMO_VOWELS = "".join([chr(_) for _ in range(0x1161, 0x1176)]) # 중성
 JAMO_TAILS = "".join([chr(_) for _ in range(0x11A8, 0x11C3)]) # 종성
 
 VALID_CHARS = JAMO_LEADS + JAMO_VOWELS + JAMO_TAILS + SPACE
-symbols = PAD + EOS + VALID_CHARS + '?'
+symbols = PAD + EOS + VALID_CHARS + '?' + '!'
 
 _symbol_to_id = {s: i for i, s in enumerate(symbols)}
 _id_to_symbol = {i: s for i, s in enumerate(symbols)}
