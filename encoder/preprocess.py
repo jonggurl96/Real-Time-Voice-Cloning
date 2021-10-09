@@ -55,11 +55,12 @@ def _init_preprocess_dataset(dataset_name, datasets_root, out_dir) -> (Path, Dat
     if not dataset_root.exists():
         print("Couldn\'t find %s, skipping this dataset." % dataset_root)
         return None, None
-    return dataset_root, DatasetLog(out_dir, dataset_name)
+    # return dataset_root, DatasetLog(out_dir, dataset_name)
+    return dataset_root
 
 
 def _preprocess_speaker_dirs(speaker_dirs, dataset_name, datasets_root, out_dir, extension,
-                             skip_existing, logger):
+                             skip_existing):
     print("%s: Preprocessing data for %d speakers." % (dataset_name, len(speaker_dirs)))
     
     # Function to preprocess utterances for one speaker
@@ -105,7 +106,7 @@ def _preprocess_speaker_dirs(speaker_dirs, dataset_name, datasets_root, out_dir,
             
             out_fpath = speaker_out_dir.joinpath(out_fname)
             np.save(out_fpath, frames)
-            logger.add_sample(duration=len(wav) / sampling_rate)
+            # logger.add_sample(duration=len(wav) / sampling_rate)
             sources_file.write("%s,%s\n" % (out_fname, in_fpath))
         
         sources_file.close()
@@ -114,21 +115,22 @@ def _preprocess_speaker_dirs(speaker_dirs, dataset_name, datasets_root, out_dir,
     with ThreadPool(8) as pool:
         list(tqdm(pool.imap(preprocess_speaker, speaker_dirs), dataset_name, len(speaker_dirs),
                   unit="speakers"))
-    logger.finalize()
+    # logger.finalize()
     print("Done preprocessing %s.\n" % dataset_name)
 
 
 def preprocess_dialog(datasets_root: Path, out_dir: Path, skip_existing=False):
+    skip_existing = True
     for dataset_name in aihub_dialog_datasets["train"]["clean"]:
         # Initialize the preprocessing
-        dataset_root, logger = _init_preprocess_dataset(dataset_name, datasets_root, out_dir)
+        dataset_root = _init_preprocess_dataset(dataset_name, datasets_root, out_dir)
         if not dataset_root:
             return 
         
         # Preprocess all speakers
         speaker_dirs = list(dataset_root.glob("*"))
         _preprocess_speaker_dirs(speaker_dirs, dataset_name, datasets_root, out_dir, "wav",
-                                 skip_existing, logger)
+                                 skip_existing)
 
 
 def preprocess_voxceleb1(datasets_root: Path, out_dir: Path, skip_existing=False):
