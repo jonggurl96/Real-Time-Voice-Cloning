@@ -73,7 +73,6 @@ python encoder_preprocess.py E:\AI-Hub_data 진행중
 python encoder_train.py run1 E:\AI-Hub_data\SV2TTS\encoder
 ```
 * E:\AI-Hub_data\SV2TTS\encoder
-  - Log_자유대화 음성(일반남녀)
   - 자유대화 음성(일반남녀)_Training_0.0baesubin
   - ...
 
