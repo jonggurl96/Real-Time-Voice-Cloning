@@ -9,7 +9,7 @@ JAMO_VOWELS = "".join([chr(_) for _ in range(0x1161, 0x1176)]) # 중성
 JAMO_TAILS = "".join([chr(_) for _ in range(0x11A8, 0x11C3)]) # 종성
 
 VALID_CHARS = JAMO_LEADS + JAMO_VOWELS + JAMO_TAILS + SPACE
-symbols = PAD + EOS + VALID_CHARS
+symbols = PAD + EOS + VALID_CHARS + '?'
 
 _symbol_to_id = {s: i for i, s in enumerate(symbols)}
 _id_to_symbol = {i: s for i, s in enumerate(symbols)}
@@ -19,6 +19,8 @@ def text_to_sequence(text):
   sequence = []
   if not 0x1100 <= ord(text[0]) <= 0x1113:
     text = ''.join(list(hangul_to_jamo(text)))
+  text = text.replace('.', '')
+  text = text.replace(',', '')
   for s in text:
     sequence.append(_symbol_to_id[s])
   sequence.append(_symbol_to_id['~'])
