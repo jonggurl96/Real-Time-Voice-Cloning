@@ -10,8 +10,8 @@ class RandomCycler:
     """
     
     def __init__(self, source):
-        if len(source) == 0:
-            raise Exception("Can't create RandomCycler from an empty collection")
+        # if len(source) == 0:
+        #     raise Exception("Can't create RandomCycler from an empty collection")
         self.all_items = list(source)
         self.next_items = []
     

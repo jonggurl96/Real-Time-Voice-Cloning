@@ -161,8 +161,7 @@ def train(run_id: str, syn_dir: str, models_dir: str, save_every: int,
         epochs = np.ceil(training_steps / steps_per_epoch).astype(np.int32)
 
         for epoch in range(1, epochs+1):
-            # for i, (texts, mels, embeds, idx) in enumerate(data_loader, 1):
-            for i, (texts, mels, embeds, idx) in enumerate(test_loader, 1):
+            for i, (texts, mels, embeds, idx) in enumerate(data_loader, 1):
                 start_time = time.time()
 
                 # Generate stop tokens for training

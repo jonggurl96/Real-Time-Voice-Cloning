@@ -15,6 +15,9 @@ def sync(device: torch.device):
 def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int, save_every: int,
           backup_every: int, vis_every: int, force_restart: bool, visdom_server: str,
           no_visdom: bool):
+    # don`t use visdom
+    no_visdom = True
+    
     # Create a dataset and a dataloader
     dataset = SpeakerVerificationDataset(clean_data_root)
     loader = SpeakerVerificationDataLoader(
@@ -65,7 +68,9 @@ def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int,
     # Training loop
     profiler = Profiler(summarize_every=10, disabled=False)
     for step, speaker_batch in enumerate(loader, init_step):
+        print("Blocking, waiting for batch (threaded)1")
         profiler.tick("Blocking, waiting for batch (threaded)")
+        print("Blocking, waiting for batch (threaded)2")
         
         # Forward pass
         inputs = torch.from_numpy(speaker_batch.data).to(device)
@@ -73,7 +78,6 @@ def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int,
         profiler.tick("Data to %s" % device)
         embeds = model(inputs)
         sync(device)
-        profiler.tick("Forward pass")
         embeds_loss = embeds.view((speakers_per_batch, utterances_per_speaker, -1)).to(loss_device)
         loss, eer = model.loss(embeds_loss)
         sync(loss_device)

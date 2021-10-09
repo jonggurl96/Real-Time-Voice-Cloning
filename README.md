@@ -69,10 +69,14 @@ depending on whether you downloaded any datasets. If you are running an X-server
 * 실행 순서
 1. encoder
 ```
-python encoder_preprocess.py E:\AI-Hub_data
+python encoder_preprocess.py E:\AI-Hub_data 진행중
 python encoder_train.py run1 E:\AI-Hub_data\SV2TTS\encoder
 ```
 * E:\AI-Hub_data\SV2TTS\encoder
+  - Log_자유대화 음성(일반남녀)
+  - 자유대화 음성(일반남녀)_Training_0.0baesubin
+  - ...
+
 2. synthesize
 ```
 python synthesizer_preprocess_audio.py E:\AI-Hub_data
