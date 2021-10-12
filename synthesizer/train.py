@@ -183,7 +183,11 @@ def train(run_id: str, syn_dir: str, models_dir: str, save_every: int,
                     m1_hat, m2_hat, attention, stop_pred = model(texts, mels, embeds)
 
                 # Backward pass
-                m1_loss = F.mse_loss(m1_hat, mels) + F.l1_loss(m1_hat, mels)
+                # if len(F.mse_loss(m1_hat, mels)) < len(F.l1_loss(m1_hat, mels)):
+                #     s = len(F.mse_loss(m1_hat, mels))
+                # elif len(F.mse_loss(m1_hat, mels)) >= len(F.l1_loss(m1_hat, mels)):
+                #     s = len(F.l1_loss(m1_hat, mels))
+                m1_loss = F.mse_loss(m1_hat, mels)[:s] + F.l1_loss(m1_hat, mels)[:s]
                 m2_loss = F.mse_loss(m2_hat, mels)
                 stop_loss = F.binary_cross_entropy(stop_pred, stop)
 

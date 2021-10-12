@@ -59,10 +59,9 @@ def _init_preprocess_dataset(dataset_name, datasets_root, out_dir) -> (Path, Dat
     return dataset_root
 
 
-def _preprocess_speaker_dirs(speaker_dirs, dataset_name, datasets_root, out_dir, extension,
-                             skip_existing):
+def _preprocess_speaker_dirs(speaker_dirs, dataset_name, datasets_root, out_dir, extension, skip_existing):
     print("%s: Preprocessing data for %d speakers." % (dataset_name, len(speaker_dirs)))
-    
+    skip_existing = True
     # Function to preprocess utterances for one speaker
     def preprocess_speaker(speaker_dir: Path):
         # Give a name to the speaker that includes its dataset
@@ -129,8 +128,7 @@ def preprocess_dialog(datasets_root: Path, out_dir: Path, skip_existing=False):
         
         # Preprocess all speakers
         speaker_dirs = list(dataset_root.glob("*"))
-        _preprocess_speaker_dirs(speaker_dirs, dataset_name, datasets_root, out_dir, "wav",
-                                 skip_existing)
+        _preprocess_speaker_dirs(speaker_dirs, dataset_name, datasets_root, out_dir, "wav", skip_existing)
 
 
 def preprocess_voxceleb1(datasets_root: Path, out_dir: Path, skip_existing=False):

@@ -12,7 +12,9 @@ class Speaker:
         
     def _load_utterances(self):
         with self.root.joinpath("_sources.txt").open("r", encoding="utf-8") as sources_file:
+            # [일반통합_0.0baesubin-일반통합-00002.npy,E:\AI-Hub_data\자유대화 음성(일반남녀)\Training\0.0baesubin\일반통합\0.0baesubin-일반통합-00002.wav]
             sources = [l.split(",") for l in sources_file]
+        # {"일반통합_0.0baesubin-일반통합-00002.npy": "E:\AI-Hub_data\자유대화 음성(일반남녀)\Training\0.0baesubin\일반통합\0.0baesubin-일반통합-00002.wav"}
         sources = {frames_fname: wave_fpath for frames_fname, wave_fpath in sources}
         self.utterances = [Utterance(self.root.joinpath(f), w) for f, w in sources.items()]
         self.utterance_cycler = RandomCycler(self.utterances)

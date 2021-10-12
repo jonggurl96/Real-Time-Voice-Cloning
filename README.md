@@ -67,13 +67,25 @@ depending on whether you downloaded any datasets. If you are running an X-server
 ## 한국어 적용하기
 * Ai Hub 자유대화 음성(일반남여) [**source**](https://aihub.or.kr/aidata/30703)
 * 실행 순서
+0. data preprocess
+```
+aihub_dataset 폴더 내 파이썬 코드 실행
+두 코드 모두 drive 변수, 경로 확인 후 실행
+move_wav.py
+  - LibriSpeech와 같은 구조로 데이터 이동
+json2txt.py
+  - json 파일 내의 정보로 LibriSpeech와 같은 형태의 text 파일 만들기
+두 코드 실행 후 원본 데이터들 [원천], [라벨]로 시작하는 폴더 삭제
+less_than_10wavs.py
+  - wav파일 10개 이하인 speaker dir 삭제
+```
+
 1. encoder
 ```
-python encoder_preprocess.py E:\AI-Hub_data 진행중
-python encoder_train.py run1 E:\AI-Hub_data\SV2TTS\encoder
+python encoder_preprocess.py E:\AI-Hub_data
+python encoder_train.py run1 E:\AI-Hub_data\SV2TTS\encoder 완료?
 ```
 * E:\AI-Hub_data\SV2TTS\encoder
-  - Log_자유대화 음성(일반남녀)
   - 자유대화 음성(일반남녀)_Training_0.0baesubin
   - ...
 
