@@ -79,7 +79,7 @@ json2txt.py
 less_than_10wavs.py
   - wav파일 10개 이하인 speaker dir 삭제
 ```
-git push test
+
 1. encoder
 ```
 python encoder_preprocess.py E:\AI-Hub_data
