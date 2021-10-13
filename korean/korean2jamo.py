@@ -38,4 +38,4 @@ def sequence_to_text(sequence):
     if symbol_id in _id_to_symbol:
       s = _id_to_symbol[symbol_id]
       result += s
-  return result.replace('}{', ' ')
+  return result.strip()

@@ -8,13 +8,14 @@ from synthesizer.synthesizer_dataset import SynthesizerDataset, collate_synthesi
 from synthesizer.utils import ValueWindow, data_parallel_workaround
 from synthesizer.utils.plot import plot_spectrogram
 from korean.korean2jamo import symbols
-from synthesizer.utils.text import sequence_to_text
+from korean.korean2jamo import sequence_to_text
 from vocoder.display import *
 from datetime import datetime
 import numpy as np
 from pathlib import Path
 import sys
 import time
+from tqdm import tqdm
 
 
 def np_now(x: torch.Tensor): return x.detach().cpu().numpy()
@@ -24,7 +25,7 @@ def time_string():
 
 def train(run_id: str, syn_dir: str, models_dir: str, save_every: int,
          backup_every: int, force_restart:bool, hparams):
-
+    force_restart = True
     syn_dir = Path(syn_dir)
     models_dir = Path(models_dir)
     models_dir.mkdir(exist_ok=True)
@@ -160,7 +161,7 @@ def train(run_id: str, syn_dir: str, models_dir: str, save_every: int,
         steps_per_epoch = np.ceil(total_iters / batch_size).astype(np.int32)
         epochs = np.ceil(training_steps / steps_per_epoch).astype(np.int32)
 
-        for epoch in range(1, epochs+1):
+        for epoch in tqdm(range(1, epochs+1), "Training", epochs, unit="epochs"):
             for i, (texts, mels, embeds, idx) in enumerate(data_loader, 1):
                 start_time = time.time()
 
