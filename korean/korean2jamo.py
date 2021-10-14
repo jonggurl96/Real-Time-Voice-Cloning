@@ -17,8 +17,9 @@ _id_to_symbol = {i: s for i, s in enumerate(symbols)}
 
 def text_to_sequence(text):
   sequence = []
-  if not 0x1100 <= ord(text[0]) <= 0x1113:
-    text = ''.join(list(hangul_to_jamo(text)))
+  # if not 0x1100 <= ord(text[0]) <= 0x1113:
+    # text = ''.join(list(hangul_to_jamo(text)))
+  text = ''.join(list(hangul_to_jamo(text)))
   text = text.replace('.', '')
   text = text.replace(',', '')
   text = text.replace('...', '')

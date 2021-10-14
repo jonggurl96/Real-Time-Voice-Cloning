@@ -25,7 +25,6 @@ def time_string():
 
 def train(run_id: str, syn_dir: str, models_dir: str, save_every: int,
          backup_every: int, force_restart:bool, hparams):
-    force_restart = True
     syn_dir = Path(syn_dir)
     models_dir = Path(models_dir)
     models_dir.mkdir(exist_ok=True)
@@ -188,7 +187,7 @@ def train(run_id: str, syn_dir: str, models_dir: str, save_every: int,
                 #     s = len(F.mse_loss(m1_hat, mels))
                 # elif len(F.mse_loss(m1_hat, mels)) >= len(F.l1_loss(m1_hat, mels)):
                 #     s = len(F.l1_loss(m1_hat, mels))
-                m1_loss = F.mse_loss(m1_hat, mels)[:s] + F.l1_loss(m1_hat, mels)[:s]
+                m1_loss = F.mse_loss(m1_hat, mels) + F.l1_loss(m1_hat, mels)
                 m2_loss = F.mse_loss(m2_hat, mels)
                 stop_loss = F.binary_cross_entropy(stop_pred, stop)
 
