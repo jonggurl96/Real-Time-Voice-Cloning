@@ -4,7 +4,7 @@ from synthesizer.hparams import modified_hp_debug_string
 from synthesizer.synthesizer_dataset import SynthesizerDataset, collate_synthesizer
 from synthesizer.utils import data_parallel_workaround
 from synthesizer.models.tacotron import Tacotron
-from synthesizer.utils.symbols import symbols
+from korean.korean2jamo import symbols
 import numpy as np
 from pathlib import Path
 from tqdm import tqdm
