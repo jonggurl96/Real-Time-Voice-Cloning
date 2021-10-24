@@ -82,7 +82,7 @@ def run_synthesis(in_dir, out_dir, model_dir, hparams):
             # else:
             #     _, mels_out, _ = model(texts, mels, embeds)
 
-            _, mels_out, _ = model(texts, mels, embeds)
+            mels_out, _, _, _ = model(texts, mels, embeds)
 
             for j, k in enumerate(idx):
                 # Note: outputs mel-spectrogram files and target ones have same names, just different folders
@@ -96,4 +96,6 @@ def run_synthesis(in_dir, out_dir, model_dir, hparams):
                 np.save(mel_filename, mel_out, allow_pickle=False)
 
                 # Write metadata into the synthesized file
+                for meta in dataset.metadata[k]:
+                    meta = meta.replace("\\u200B", "")
                 file.write("|".join(dataset.metadata[k]))
