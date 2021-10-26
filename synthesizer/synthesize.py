@@ -103,6 +103,6 @@ def run_synthesis(in_dir, out_dir, model_dir, hparams):
 
 def delete_zwsp(text):
     text = text.strip()
-    text = re.sub(r"[^a-zA-Z0-9가-힣?.!,¿]+", " ", text) # \n도 공백으로 대체해줌
+    text = re.sub(r"[^a-zA-Z0-9가-힣?.!,¿]+", "", text) # \n도 공백으로 대체해줌
     text = text.strip()
     return text
