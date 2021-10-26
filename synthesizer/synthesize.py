@@ -98,11 +98,11 @@ def run_synthesis(in_dir, out_dir, model_dir, hparams):
 
                 # Write metadata into the synthesized file
                 for meta in dataset.metadata[k]:
-                    meta = delete_zwsp(meta)
+                    meta = meta.replace("\u200b", "")
                 file.write("|".join(dataset.metadata[k]))
 
 def delete_zwsp(text):
     text = text.strip()
-    text = re.sub(r"[^a-zA-Z0-9가-힣?.!,¿]+", "", text) # \n도 공백으로 대체해줌
+    text = re.sub(r"[^a-zA-Z0-9가-힣?.!,¿-_]+", "", text) # \n도 공백으로 대체해줌
     text = text.strip()
     return text
