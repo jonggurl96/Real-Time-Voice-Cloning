@@ -8,6 +8,7 @@ from korean.korean2jamo import symbols
 import numpy as np
 from pathlib import Path
 from tqdm import tqdm
+import re
 
 
 def run_synthesis(in_dir, out_dir, model_dir, hparams):
@@ -97,5 +98,11 @@ def run_synthesis(in_dir, out_dir, model_dir, hparams):
 
                 # Write metadata into the synthesized file
                 for meta in dataset.metadata[k]:
-                    meta = meta.replace("\\u200b", "")
+                    meta = delete_zwsp(meta)
                 file.write("|".join(dataset.metadata[k]))
+
+def delete_zwsp(text):
+    text = text.strip()
+    text = re.sub(r"[^0-9가-힣?.!,¿]+", " ", text) # \n도 공백으로 대체해줌
+    text = text.strip()
+    return text
