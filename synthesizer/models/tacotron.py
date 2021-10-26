@@ -130,12 +130,12 @@ class CBHG(nn.Module):
 
         # Save these for later
         residual = x
-        seq_len = x.size(-1)
+        seq_len = x.size(-1) # 마지막 사이즈
         conv_bank = []
 
         # Convolution Bank
         for conv in self.conv1d_bank:
-            c = conv(x) # Convolution
+            c = conv(x) # Convolution, BatchNormConv
             conv_bank.append(c[:, :, :seq_len])
 
         # Stack along the channel axis
@@ -145,8 +145,8 @@ class CBHG(nn.Module):
         x = self.maxpool(conv_bank)[:, :, :seq_len]
 
         # Conv1d projections
-        x = self.conv_project1(x)
-        x = self.conv_project2(x)
+        x = self.conv_project1(x) # BatchNormConv
+        x = self.conv_project2(x) # BatchNormConv
 
         # Residual Connect
         x = x + residual
@@ -154,11 +154,13 @@ class CBHG(nn.Module):
         # Through the highways
         x = x.transpose(1, 2)
         if self.highway_mismatch is True:
-            x = self.pre_highway(x)
-        for h in self.highways: x = h(x)
+            x = self.pre_highway(x) # nn.Linear
+        for h in self.highways: x = h(x) # HighwayNetwork
 
         # And then the RNN
-        x, _ = self.rnn(x)
+        # CBHG를 사용하는 이유는 highway를 사용함으로써 character 단위를 표현하는데 더 효율적으로 되기 때문이다.
+        # 최종적으로 highway 4번에 걸쳐 나온 Vector가 Attention에 사용될 query가 된다.
+        x, _ = self.rnn(x) # nn.GRU, Bidirectional RNN
         return x
 
     def _flatten_parameters(self):
@@ -174,16 +176,20 @@ class PreNet(nn.Module):
         self.p = dropout
 
     def forward(self, x):
-        x = self.fc1(x)
+        x = self.fc1(x) # dense
         x = F.relu(x)
         x = F.dropout(x, self.p, training=True)
-        x = self.fc2(x)
+        x = self.fc2(x) # dense
         x = F.relu(x)
         x = F.dropout(x, self.p, training=True)
         return x
 
 
 class Attention(nn.Module):
+    # Attention은 학습 중인 화자 고유의 발화 특징 또는 문장의 핵심 장소에 집중하여 더 자연스러운 합성이 되도록 하는 역할을 한다.
+    # 예를 들면, ‘안녕하세요’와 ‘반갑습니다’
+    # 둘 다 ‘안’과 ‘반’은 문장의 시작으로 상대적으로 더 뚜렷해야 하고,
+    # 화자마다 강세를 어디에 두는 지에 따라 느낌이 달라지니 이를 위해 필요하다.
     def __init__(self, attn_dims):
         super().__init__()
         self.W = nn.Linear(attn_dims, attn_dims, bias=False)
@@ -278,7 +284,7 @@ class Decoder(nn.Module):
         rnn1_cell, rnn2_cell = cell_states
 
         # PreNet for the Attention RNN
-        prenet_out = self.prenet(prenet_in)
+        prenet_out = self.prenet(prenet_in) # PreNet
 
         # Compute the Attention RNN hidden state
         attn_rnn_in = torch.cat([context_vec, prenet_out], dim=-1)
@@ -312,7 +318,7 @@ class Decoder(nn.Module):
         x = x + rnn2_hidden
 
         # Project Mels
-        mels = self.mel_proj(x)
+        mels = self.mel_proj(x) # nn.Linear
         mels = mels.view(batch_size, self.n_mels, self.max_r)[:, :, :self.r]
         hidden_states = (attn_hidden, rnn1_hidden, rnn2_hidden)
         cell_states = (rnn1_cell, rnn2_cell)
