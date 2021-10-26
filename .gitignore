@@ -14,4 +14,7 @@
 *.bcf
 *.toc
 *.wav
+*.png
 *.sh
+*.pt
+*_backups/

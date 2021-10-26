@@ -1,8 +1,8 @@
-from encoder.visualizations import Visualizations
+# from encoder.visualizations import Visualizations
 from encoder.data_objects import SpeakerVerificationDataLoader, SpeakerVerificationDataset
 from encoder.params_model import *
 from encoder.model import SpeakerEncoder
-from utils.profiler import Profiler
+# from utils.profiler import Profiler
 from pathlib import Path
 import torch
 
@@ -15,8 +15,6 @@ def sync(device: torch.device):
 def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int, save_every: int,
           backup_every: int, vis_every: int, force_restart: bool, visdom_server: str,
           no_visdom: bool):
-    # don`t use visdom
-    no_visdom = True
     
     # Create a dataset and a dataloader
     dataset = SpeakerVerificationDataset(clean_data_root)
@@ -59,41 +57,40 @@ def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int,
     model.train()
     
     # Initialize the visualization environment
-    vis = Visualizations(run_id, vis_every, server=visdom_server, disabled=no_visdom)
-    vis.log_dataset(dataset)
-    vis.log_params()
+    # vis = Visualizations(run_id, vis_every, server=visdom_server, disabled=no_visdom)
+    # vis.log_dataset(dataset)
+    # vis.log_params()
     device_name = str(torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU")
-    vis.log_implementation({"Device": device_name})
+    # vis.log_implementation({"Device": device_name})
     
     # Training loop
-    profiler = Profiler(summarize_every=10, disabled=False)
+    # profiler = Profiler(summarize_every=10, disabled=False)
+    print(device_name)
     for step, speaker_batch in enumerate(loader, init_step):
-        print("Blocking, waiting for batch (threaded)1")
-        profiler.tick("Blocking, waiting for batch (threaded)")
-        print("Blocking, waiting for batch (threaded)2")
+        # profiler.tick("Blocking, waiting for batch (threaded)")
         
         # Forward pass
         inputs = torch.from_numpy(speaker_batch.data).to(device)
         sync(device)
-        profiler.tick("Data to %s" % device)
+        # profiler.tick("Data to %s" % device)
         embeds = model(inputs)
         sync(device)
         embeds_loss = embeds.view((speakers_per_batch, utterances_per_speaker, -1)).to(loss_device)
         loss, eer = model.loss(embeds_loss)
         sync(loss_device)
-        profiler.tick("Loss")
+        # profiler.tick("Loss")
 
         # Backward pass
         model.zero_grad()
         loss.backward()
-        profiler.tick("Backward pass")
+        # profiler.tick("Backward pass")
         model.do_gradient_ops()
         optimizer.step()
-        profiler.tick("Parameter update")
+        # profiler.tick("Parameter update")
         
         # Update visualizations
         # learning_rate = optimizer.param_groups[0]["lr"]
-        vis.update(loss.item(), eer, step)
+        # vis.update(loss.item(), eer, step)
         
         # Draw projections and save them to the backup folder
         if umap_every != 0 and step % umap_every == 0:
@@ -101,8 +98,8 @@ def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int,
             backup_dir.mkdir(exist_ok=True)
             projection_fpath = backup_dir.joinpath("%s_umap_%06d.png" % (run_id, step))
             embeds = embeds.detach().cpu().numpy()
-            vis.draw_projections(embeds, utterances_per_speaker, step, projection_fpath)
-            vis.save()
+            # vis.draw_projections(embeds, utterances_per_speaker, step, projection_fpath)
+            # vis.save()
 
         # Overwrite the latest version of the model
         if save_every != 0 and step % save_every == 0:
@@ -124,4 +121,4 @@ def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int,
                 "optimizer_state": optimizer.state_dict(),
             }, backup_fpath)
             
-        profiler.tick("Extras (visualizations, saving)")
+        # profiler.tick("Extras (visualizations, saving)")
