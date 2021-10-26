@@ -97,5 +97,5 @@ def run_synthesis(in_dir, out_dir, model_dir, hparams):
 
                 # Write metadata into the synthesized file
                 for meta in dataset.metadata[k]:
-                    meta = meta.replace("\\u200B", "")
+                    meta = meta.replace("\\u200b", "")
                 file.write("|".join(dataset.metadata[k]))
