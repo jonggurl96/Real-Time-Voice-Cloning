@@ -98,8 +98,7 @@ def run_synthesis(in_dir, out_dir, model_dir, hparams):
 
                 # Write metadata into the synthesized file
                 for meta in dataset.metadata[k]:
-                    # meta = delete_zwsp(meta)
-                    meta = meta.replace("\u200b", "")
+                    meta = delete_zwsp(meta)
                 file.write("|".join(dataset.metadata[k]))
 
 def delete_zwsp(text):
