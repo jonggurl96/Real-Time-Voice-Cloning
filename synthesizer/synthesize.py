@@ -71,7 +71,7 @@ def run_synthesis(in_dir, out_dir, model_dir, hparams):
 
     # Generate GTA mels
     meta_out_fpath = Path(out_dir).joinpath("synthesized.txt")
-    with open(meta_out_fpath, "w") as file:
+    with open(meta_out_fpath, "w", encoding="utf-8") as file:
         for i, (texts, mels, embeds, idx) in tqdm(enumerate(data_loader), total=len(data_loader)):
             texts = texts.to(device)
             mels = mels.to(device)
@@ -97,12 +97,5 @@ def run_synthesis(in_dir, out_dir, model_dir, hparams):
                 np.save(mel_filename, mel_out, allow_pickle=False)
 
                 # Write metadata into the synthesized file
-                for meta in dataset.metadata[k]:
-                    meta = delete_zwsp(meta)
                 file.write("|".join(dataset.metadata[k]))
 
-def delete_zwsp(text):
-    text = text.strip()
-    text = re.sub(r"[^a-zA-Z0-9가-힣?.!,¿_\s\-]+", "", text) # \n도 공백으로 대체해줌
-    text = text.strip()
-    return text
