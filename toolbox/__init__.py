@@ -34,7 +34,7 @@ recognized_datasets = [
     "VoxCeleb2/dev/aac",
     "VoxCeleb2/test/aac",
     "VCTK-Corpus/wav48",
-    "wavs/Training",
+    "Training",
 ]
 
 #Maximum of generated wavs to keep on memory

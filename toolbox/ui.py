@@ -302,6 +302,7 @@ class UI(QDialog):
     
         # Select a random speaker
         if level <= 1:
+            # datasets_root/Training
             speakers_root = datasets_root.joinpath(self.current_dataset_name)
             speaker_names = [d.stem for d in speakers_root.glob("*") if d.is_dir()]
             self.repopulate_box(self.speaker_box, speaker_names, random)
@@ -313,8 +314,9 @@ class UI(QDialog):
                 self.current_speaker_name
             )
             utterances = []
-            for extension in ['mp3', 'flac', 'wav', 'm4a']:
-                utterances.extend(Path(utterances_root).glob("**/*.%s" % extension))
+            # for extension in ['mp3', 'flac', 'wav', 'm4a']:
+            #     utterances.extend(Path(utterances_root).glob("**/*.%s" % extension))
+            utterances.extend(Path(utterances_root).glob("**/*.wav"))
             utterances = [fpath.relative_to(utterances_root) for fpath in utterances]
             self.repopulate_box(self.utterance_box, utterances, random)
             

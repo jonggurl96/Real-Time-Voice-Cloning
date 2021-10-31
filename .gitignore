@@ -19,3 +19,4 @@
 *.pt
 *_backups/
 wavs/
+datasets_root/
