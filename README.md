@@ -83,7 +83,7 @@ less_than_10wavs.py
 1. encoder
 ```
 python encoder_preprocess.py E:\AI-Hub_data
-python encoder_train.py run1 E:\AI-Hub_data\SV2TTS\encoder 완료?
+python encoder_train.py run1 E:\AI-Hub_data\SV2TTS\encoder
 ```
 * E:\AI-Hub_data\SV2TTS\encoder
   - 자유대화 음성(일반남녀)_Training_0.0baesubin

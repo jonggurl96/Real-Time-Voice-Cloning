@@ -18,6 +18,9 @@ def train(run_id: str, syn_dir: Path, voc_dir: Path, models_dir: Path, ground_tr
     # Check to make sure the hop length is correctly factorised
     assert np.cumprod(hp.voc_upsample_factors)[-1] == hp.hop_length
     
+    # syndir 사용
+    ground_truth = True
+
     # Instantiate the model
     print("Initializing the model...")
     model = WaveRNN(
@@ -39,7 +42,7 @@ def train(run_id: str, syn_dir: Path, voc_dir: Path, models_dir: Path, ground_tr
         model = model.cuda()
         device = torch.device('cuda')
     else:
-        device = torch.device('cpu')   
+        device = torch.device('cpu')
 
     # Initialize the optimizer
     optimizer = optim.Adam(model.parameters())
