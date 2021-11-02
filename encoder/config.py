@@ -1,6 +1,6 @@
 aihub_dialog_datasets = {
     "train": {
-        "clean": ["자유대화 음성(일반남녀)\\Training"]
+        "clean": ["자유대화 음성(일반남녀)/Training"]
     }
 }
 
