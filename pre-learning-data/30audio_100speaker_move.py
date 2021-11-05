@@ -8,7 +8,7 @@ out_dir = Path("F:/옮길거/Training")
 
 speakers785 = [m for m in datasets_root.glob("*") if m.is_dir()]
 # speaker list에서 100개 중복을 허용하지 않고 추출
-speakers = random.sample(speakers785, 100)
+speakers = random.sample(speakers785, 256)
 for speaker in tqdm(speakers, unit="speakers"):
   chapters = sorted([m for m in speaker.glob("*") if m.is_dir()])
   chapter = chapters[-1]

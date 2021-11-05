@@ -5,6 +5,7 @@ from pathlib import Path
 # Contains the set of utterances of a single speaker
 class Speaker:
     def __init__(self, root: Path):
+        # SV2TTS/encoder/recorederID
         self.root = root # recorderId까지의 Path
         self.name = root.name # Path의 마지막 File/Dir: recorderId
         self.utterances = None
