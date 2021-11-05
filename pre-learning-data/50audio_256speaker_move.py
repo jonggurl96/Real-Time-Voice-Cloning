@@ -16,7 +16,7 @@ for speaker in tqdm(speakers, unit="speakers"):
   speaker_chapter = out_dir.joinpath(speaker.name, chapter.name)
   speaker_chapter.mkdir(parents=True, exist_ok=True)
   
-  wavs = wavs[:30]
+  wavs = wavs[:50]
   for wav in wavs:
     fname = wav.name
     copy_path = speaker_chapter.joinpath(fname)
