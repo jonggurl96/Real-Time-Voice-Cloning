@@ -115,9 +115,9 @@ python vocoder_train.py run1 E:\AI-Hub_data
 |---|---|---|
 |subfolder|train-clean-100|Training|
 |speaker|19|0.0baesubin	=> Speaker self.root|
-|chapter|198|일반대화|
-|text|19-198.trans.txt|0.0baesubin-일반대화.trans.txt|
-|audio|19-198-0000.flac|0.0baesubin-일반대화-00002.wav|
+|chapter|198|일반통합:01, 자유대화:02|
+|text|19-198.trans.txt|0.0baesubin-01.trans.txt|
+|audio|19-198-0000.flac|0.0baesubin-01-00002.wav|
 
 ==============================
 

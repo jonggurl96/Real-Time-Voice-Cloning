@@ -29,7 +29,7 @@ if __name__ == "__main__":
     parser.add_argument("--no_alignments", action="store_true", help=\
         "Use this option when dataset does not include alignments\
         (these are used to split long audio files into sub-utterances.)")
-    parser.add_argument("--datasets_name", type=str, default="자유대화 음성(일반남녀)", help=\
+    parser.add_argument("--datasets_name", type=str, default="data", help=\
         "Name of the dataset directory to process. Changed from LibriSpeech")
     parser.add_argument("--subfolder", type=str, default="Training", help=\
         "change from train-clean-100, train-clean-360 to Training")
