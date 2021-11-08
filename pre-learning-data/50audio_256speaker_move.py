@@ -1,18 +1,26 @@
-import shutil
+import sys
 import random
-from tqdm import tqdm
+import shutil
 from pathlib import Path
 
-datasets_root = Path("E:/AI-Hub_data/자유대화 음성(일반남녀)/Training")
+datasets_root = Path("E:/AI-Hub_data/data/Training")
 out_dir = Path("C:/Users/LeeJongGeol/Desktop/Training")
 
-speakers785 = [m for m in datasets_root.glob("*") if m.is_dir()]
-# speaker list에서 100개 중복을 허용하지 않고 추출
-speakers = random.sample(speakers785, 256)
-for speaker in tqdm(speakers, unit="speakers"):
+speakers = [m for m in datasets_root.glob("*") if m.is_dir()]
+random.shuffle(speakers)
+# speaker list에서 256개 중복을 허용하지 않고 추출
+more50cnt = 0 # 50
+wcnt = 0 # 256 * 50 = 12800
+for speaker in speakers:
+
+  # 01: 일반통합, 02: 자유대화
+  # 자유대화의 비율이 더 적어서 둘 다 있는 화자의 경우 자유대화 선택
   chapters = sorted([m for m in speaker.glob("*") if m.is_dir()])
   chapter = chapters[-1]
   wavs = sorted(chapter.glob("*.wav"))
+  if len(wavs) < 50:
+    continue
+  
   speaker_chapter = out_dir.joinpath(speaker.name, chapter.name)
   speaker_chapter.mkdir(parents=True, exist_ok=True)
   
@@ -21,6 +29,7 @@ for speaker in tqdm(speakers, unit="speakers"):
     fname = wav.name
     copy_path = speaker_chapter.joinpath(fname)
     shutil.copy(wav, copy_path)
+    wcnt += 1
   
   # trans.txt 추가
   meta = chapter.joinpath(f"{speaker.name}-{chapter.name}.trans.txt")
@@ -38,3 +47,11 @@ for speaker in tqdm(speakers, unit="speakers"):
       wav = wav.replace(".wav", "")
       metadata = wav + " " + texts[wav] + "\n"
       f.write(metadata)
+
+  more50cnt += 1
+  sys.stdout.write('\r%d/256 speakers' % more50cnt)
+  if more50cnt == 256:
+    break
+  
+print(f"50 audios per {more50cnt} speakers")
+print(f"total {wcnt} audios")

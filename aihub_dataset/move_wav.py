@@ -36,9 +36,7 @@ for sd in sub_dir:
       speaker = splitted[3]
       chapter = splitted[1]
       if chapter.startswith("일반통합"):
-        chapter = "01"
-      else:
-        chapter = "02"
+        chapter = "일반통합"
 
       # 일반남여_일반통합05_M_1455308554-6_37_수도권_실내_06313.wav
       for wav in wavs:

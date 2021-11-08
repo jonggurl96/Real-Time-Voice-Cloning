@@ -1,5 +1,9 @@
 from pathlib import Path
 from tqdm import tqdm
+"""
+3번째 실행
+wav파일 10개 이하 폴더 삭제
+"""
 
 training_dir = Path("E:\AI-Hub_data\data\Training")
 speaker_dirs = [path for path in training_dir.glob("*") if path.is_dir()]

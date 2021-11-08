@@ -3,6 +3,7 @@ import json
 from tqdm import tqdm
 
 """
+2번째 실행
 directory structure
 Training
   [라벨]1.AI챗봇
