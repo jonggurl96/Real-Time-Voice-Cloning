@@ -243,11 +243,13 @@ def process_utterance(wav: np.ndarray, text: str, out_dir: Path, basename: str,
         return None
 
     # Trim silence
-    if hparams.trim_silence:
+    if hparams.trim_silence: # True
         wav = encoder.preprocess_wav(wav, normalize=False, trim_silence=True)
         # 그냥 깔끔히 잘 정리된 오디오, normalize, resmapling, ...
 
     # Skip utterances that are too short
+    # hparams.utterance_min_duration = 1.6, hparams.sample_rate = 16000
+    # if len(wav) < 25600
     if len(wav) < hparams.utterance_min_duration * hparams.sample_rate:
         return None
 
@@ -256,6 +258,7 @@ def process_utterance(wav: np.ndarray, text: str, out_dir: Path, basename: str,
     mel_frames = mel_spectrogram.shape[1]
 
     # Skip utterances that are too long
+    # hparams.max_mel_frames = 900, hparams.clip_mels_length = True
     if mel_frames > hparams.max_mel_frames and hparams.clip_mels_length:
         return None
 

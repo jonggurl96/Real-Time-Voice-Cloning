@@ -42,9 +42,9 @@ def preprocess_wav(fpath_or_wav: Union[str, Path, np.ndarray],
         wav = librosa.resample(wav, source_sr, sampling_rate)
         
     # Apply the preprocessing: normalize volume and shorten long silences 
-    if normalize:
+    if normalize: # True
         wav = normalize_volume(wav, audio_norm_target_dBFS, increase_only=True)
-    if webrtcvad and trim_silence:
+    if webrtcvad and trim_silence: # False
         wav = trim_long_silences(wav)
     
     return wav
