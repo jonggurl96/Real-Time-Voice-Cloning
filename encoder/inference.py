@@ -153,8 +153,9 @@ def embed_utterance(wav, using_partials=True, return_partials=False, **kwargs):
     raw_embed = np.mean(partial_embeds, axis=0)
     norm = np.linalg.norm(raw_embed, 2)
     if norm == 0:
-        norm = 0.1
-    embed = raw_embed / norm
+        embed = raw_embed
+    else:
+        embed = raw_embed / norm
     
     if return_partials:#False
         return embed, partial_embeds, wave_slices
