@@ -4,6 +4,7 @@ from encoder.params_model import *
 from encoder.model import SpeakerEncoder
 # from utils.profiler import Profiler
 from pathlib import Path
+from tqdm import tqdm
 import torch
 
 def sync(device: torch.device):
@@ -66,7 +67,7 @@ def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int,
     # Training loop
     # profiler = Profiler(summarize_every=10, disabled=False)
     print(device_name)
-    for step, speaker_batch in enumerate(loader, init_step):
+    for step, speaker_batch in tqdm(enumerate(loader, init_step), "Training"):
         # profiler.tick("Blocking, waiting for batch (threaded)")
         
         # Forward pass
