@@ -22,7 +22,7 @@ encoder/inference line 151
     일단 norm을 0.1로 고정하고 진행
     synthesizer_train.py 실행중
 
-github token: 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
+github token: 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
 
 run_id aisrc: norm == 0일 때 norm = 0.1
 run_id ai: norm == 0일 때 raw_embed return
