@@ -1,14 +1,14 @@
 python encoder_preprocess.py datasets_root
-python encoder_train.py aisrc datasets_root/SV2TTS/encoder
+python encoder_train.py fin datasets_root/SV2TTS/encoder
 
 python synthesizer_preprocess_audio.py datasets_root
     SV2TTS/synthesizer/audios, mels 생성
-python synthesizer_preprocess_embeds.py datasets_root/SV2TTS/synthesizer --encoder_model_fpath=encoder/saved_models/aisrc.pt
+python synthesizer_preprocess_embeds.py datasets_root/SV2TTS/synthesizer --encoder_model_fpath=encoder/saved_models/fin_optim.pt
     SV2TTS/synthesizer/embeds 생성
-python synthesizer_train.py ai datasets_root/SV2TTS/synthesizer
+python synthesizer_train.py fin datasets_root/SV2TTS/synthesizer
 
-python vocoder_preprocess.py datasets_root --model_dir=synthesizer/saved_models/ai
-python vocoder_train.py ai datasets_root
+python vocoder_preprocess.py datasets_root --model_dir=synthesizer/saved_models/fin
+python vocoder_train.py fin datasets_root
 
 
 
@@ -22,7 +22,12 @@ encoder/inference line 151
     일단 norm을 0.1로 고정하고 진행
     synthesizer_train.py 실행중
 
-github token: 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
+github token: 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
 
 run_id aisrc: norm == 0일 때 norm = 0.1
 run_id ai: norm == 0일 때 raw_embed return
+
+encoder training loss가 높으면 encoder/model.py 59 line norm값이 0인지 확인하고 위와 같이 바꿔서 다시 학습
+
+run1, aisrc, ai, fin...
+실행 중이라 github에 push가 안되는건가?

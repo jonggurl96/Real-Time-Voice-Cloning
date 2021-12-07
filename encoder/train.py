@@ -6,13 +6,20 @@ from encoder.model import SpeakerEncoder
 from pathlib import Path
 from tqdm import tqdm
 import torch
+import sys
 
 def sync(device: torch.device):
     # For correct profiling (cuda operations are async)
     if device.type == "cuda":
         torch.cuda.synchronize(device)
     
-
+def _save_model(save_path: Path, step, model, optimizer):
+    torch.save({
+        "step": step + 1,
+        "model_state": model.state_dict(),
+        "optimizer_state": optimizer.state_dict(),
+    }, save_path)
+    
 def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int, save_every: int,
           backup_every: int, vis_every: int, force_restart: bool, visdom_server: str,
           no_visdom: bool):
@@ -41,6 +48,7 @@ def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int,
     # Configure file path for the model
     state_fpath = models_dir.joinpath(run_id + ".pt")
     backup_dir = models_dir.joinpath(run_id + "_backups")
+    optim_dir = models_dir.joinpath(run_id + "_optim.pt")
 
     # Load any existing model
     if not force_restart:
@@ -67,7 +75,8 @@ def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int,
     # Training loop
     # profiler = Profiler(summarize_every=10, disabled=False)
     print(device_name)
-    for step, speaker_batch in tqdm(enumerate(loader, init_step), "Training"):
+    max_loss = 9.99
+    for step, speaker_batch in enumerate(loader, init_step):
         # profiler.tick("Blocking, waiting for batch (threaded)")
         
         # Forward pass
@@ -93,9 +102,11 @@ def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int,
         # learning_rate = optimizer.param_groups[0]["lr"]
         # vis.update(loss.item(), eer, step)
         
+        msg = f"step: {step}, loss: {loss:.6f}"
+        
         # Draw projections and save them to the backup folder
         if umap_every != 0 and step % umap_every == 0:
-            print("Drawing and saving projections (step %d)" % step)
+            msg = msg + ", Drawing and saving projections (step %d)" % step
             backup_dir.mkdir(exist_ok=True)
             projection_fpath = backup_dir.joinpath("%s_umap_%06d.png" % (run_id, step))
             embeds = embeds.detach().cpu().numpy()
@@ -104,7 +115,7 @@ def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int,
 
         # Overwrite the latest version of the model
         if save_every != 0 and step % save_every == 0:
-            print("Saving the model (step %d)" % step)
+            msg = msg + ", Saving the model (step %d)" % step
             torch.save({
                 "step": step + 1,
                 "model_state": model.state_dict(),
@@ -113,13 +124,17 @@ def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int,
             
         # Make a backup
         if backup_every != 0 and step % backup_every == 0:
-            print("Making a backup (step %d)" % step)
+            msg = msg + ", Making a backup (step %d)" % step
             backup_dir.mkdir(exist_ok=True)
             backup_fpath = backup_dir.joinpath("%s_bak_%06d.pt" % (run_id, step))
-            torch.save({
-                "step": step + 1,
-                "model_state": model.state_dict(),
-                "optimizer_state": optimizer.state_dict(),
-            }, backup_fpath)
+            _save_model(backup_fpath, step, model, optimizer)
+            
+        # Save lowest loss model state
+        if max_loss > loss:
+            max_loss = loss
+            _save_model(optim_dir, step, model, optimizer)
+            msg = "Save Model " + msg + "\n"
+        
+        sys.stdout.write("\r%s" % msg)
             
         # profiler.tick("Extras (visualizations, saving)")
