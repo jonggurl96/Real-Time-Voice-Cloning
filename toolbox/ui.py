@@ -439,7 +439,7 @@ class UI(QDialog):
         root_layout = QGridLayout()
         self.setLayout(root_layout)
         
-        # Browser
+        # Browser: 음성 검색
         browser_layout = QGridLayout()
         root_layout.addLayout(browser_layout, 0, 0, 1, 2)
         
@@ -502,7 +502,7 @@ class UI(QDialog):
         
         # Random & next utterance buttons
         self.browser_browse_button = QPushButton("Browse")
-        browser_layout.addWidget(self.browser_browse_button, i, 0)
+        browser_layout.addWidget(self.browser_browse_button, i, 0) # 직접 embedding할 음성 찾는 버튼
         self.record_button = QPushButton("Record")
         browser_layout.addWidget(self.record_button, i, 1)
         self.play_button = QPushButton("Play")

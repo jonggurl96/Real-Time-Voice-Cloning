@@ -3,7 +3,7 @@ from synthesizer import audio
 from synthesizer.hparams import hparams
 from synthesizer.models.tacotron import Tacotron
 from korean.korean2jamo import symbols
-from synthesizer.utils.text import text_to_sequence
+from korean.korean2jamo import text_to_sequence
 from vocoder.display import simple_table
 from pathlib import Path
 from typing import Union, List
@@ -92,7 +92,7 @@ class Synthesizer:
                         ("r", self._model.r)])
 
         # Preprocess text inputs
-        inputs = [text_to_sequence(text.strip(), hparams.tts_cleaner_names) for text in texts]
+        inputs = [text_to_sequence(text.strip()) for text in texts]
         if not isinstance(embeddings, list):
             embeddings = [embeddings]
 
