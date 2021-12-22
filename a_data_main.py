@@ -13,12 +13,12 @@ from tqdm import tqdm
 import numpy as np
 import soundfile
 
-encoder_model_fpath = Path("Real-Time-Voice-Cloning/encoder/saved_models/fin_optim.pt")
-synthesizer_model_fpath = Path("Real-Time-Voice-Cloning/synthesizer/saved_models/fin/fin.pt")
-vocoder_model_fpath = Path("Real-Time-Voice-Cloning/vocoder/saved_models/fin/fin.pt")
+encoder_model_fpath = Path("encoder/saved_models/fin_optim.pt")
+synthesizer_model_fpath = Path("synthesizer/saved_models/fin/fin.pt")
+vocoder_model_fpath = Path("vocoder/saved_models/fin/fin.pt")
 
-input_wavs_alignment_path = "C:\\Users\\LeeJongGeol\\Desktop\\prototype\\alignment.json"
-output_wav_fpath = Path("C:\\Users\\LeeJongGeol\\Desktop\\prototype\\outputs")
+input_wavs_alignment_path = "datasets_root/prototype/alignment.json"
+output_wav_fpath = Path("datasets_root/prototype/outputs")
 
 encoder.load_model(encoder_model_fpath)
 synthesizer = Synthesizer(synthesizer_model_fpath)
@@ -60,7 +60,7 @@ for embed, filename in tqdm(zip(embeds, filenames), "Embed", len(embeds)):
     fin_fpath = output_wav_fpath.joinpath(fin_wav_name)
     gl_fpath = output_wav_fpath.joinpath(gl_wav_name)
 
-    exit()
-
     soundfile.write(fin_fpath, fin_wav, Synthesizer.sample_rate)
     soundfile.write(gl_fpath, griffin_lim_wav, Synthesizer.sample_rate)
+    
+    exit()

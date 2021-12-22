@@ -31,3 +31,10 @@ encoder training loss가 높으면 encoder/model.py 59 line norm값이 0인지 �
 
 run1, aisrc, ai, fin...
 실행 중이라 github에 push가 안되는건가?
+
+encoder_model_fpath = Path("Real-Time-Voice-Cloning/encoder/saved_models/fin_optim.pt")
+synthesizer_model_fpath = Path("Real-Time-Voice-Cloning/synthesizer/saved_models/fin/fin.pt")
+vocoder_model_fpath = Path("Real-Time-Voice-Cloning/vocoder/saved_models/fin/fin.pt")
+
+input_wavs_alignment_path = "C:\\Users\\LeeJongGeol\\Desktop\\prototype\\alignment.json"
+output_wav_fpath = Path("C:\\Users\\LeeJongGeol\\Desktop\\prototype\\outputs")
