@@ -26,10 +26,11 @@ class Synthesizer:
         self.verbose = verbose
  
         # Check for GPU
-        if torch.cuda.is_available():
-            self.device = torch.device("cuda")
-        else:
-            self.device = torch.device("cpu")
+        # if torch.cuda.is_available():
+        #     self.device = torch.device("cuda")
+        # else:
+        #     self.device = torch.device("cpu")
+        self.device = torch.device("cpu")
         if self.verbose:
             print("Synthesizer using device:", self.device)
         
@@ -124,6 +125,8 @@ class Synthesizer:
             _, mels, alignments = self._model.generate(chars, speaker_embeddings)
             mels = mels.detach().cpu().numpy()
             for m in mels:
+                if len(m) == 0:
+                    continue
                 # Trim silence from end of each spectrogram
                 while np.max(m[:, -1]) < hparams.tts_stop_threshold:
                     m = m[:, :-1]

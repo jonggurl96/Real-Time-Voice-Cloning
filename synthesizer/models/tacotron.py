@@ -422,7 +422,8 @@ class Tacotron(nn.Module):
 
     def generate(self, x, speaker_embedding=None, steps=2000):
         self.eval()
-        device = next(self.parameters()).device  # use same device as parameters
+        # device = next(self.parameters()).device  # use same device as parameters
+        device = torch.device("cpu")
 
         batch_size, _  = x.size()
 

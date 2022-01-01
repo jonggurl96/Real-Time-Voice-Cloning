@@ -9,14 +9,13 @@ def get_input_paths_texts(path):
     input_text = jf["input_text"]
     output_text = jf["output_text"]
 
-  speakers_path = Path("C:\\Users\\LeeJongGeol\\Desktop\\prototype\\inputs")
+  speakers_path = Path("datasets_root/prototype/inputs")
   speaker_path = sorted([m for m in speakers_path.glob("*") if m.is_dir()])
 
   wavpaths = []
   for speaker in speaker_path:
     wavs = [m for m in speaker.glob("*.wav")]
     wavpaths.extend(wavs)
-  
   return wavpaths, output_text
 
 def add_breaks(wav, breaks, Synthesizer):

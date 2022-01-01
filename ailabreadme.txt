@@ -38,3 +38,5 @@ vocoder_model_fpath = Path("Real-Time-Voice-Cloning/vocoder/saved_models/fin/fin
 
 input_wavs_alignment_path = "C:\\Users\\LeeJongGeol\\Desktop\\prototype\\alignment.json"
 output_wav_fpath = Path("C:\\Users\\LeeJongGeol\\Desktop\\prototype\\outputs")
+
+python a_data_main.py
